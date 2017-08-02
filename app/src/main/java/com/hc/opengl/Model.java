@@ -31,9 +31,9 @@ public class Model {
 
     //返回模型的中心点
     public Point getCentrePoint() {
-        float cx = (maxX - minX) / 2;
-        float cy = (maxY - minY) / 2;
-        float cz = (maxZ - minZ) / 2;
+        float cx = (maxX + minX) / 2;
+        float cy = (maxY + minY) / 2;
+        float cz = (maxZ + minZ) / 2;
         return new Point(cx, cy, cz);
     }
 

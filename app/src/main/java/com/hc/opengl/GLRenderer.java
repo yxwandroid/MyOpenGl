@@ -19,10 +19,10 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     private Model model;
     private Point mCenterPoint;
     private Point eye = new Point(0, 0, -3);
-    private Point up = new Point(0, 1, 0);
+    private Point up = new Point(1, 0, 0);
     private Point center = new Point(0, 0, 0);
     private float mScalef = 1;
-
+    Point centrePoint;
     public float getmDegree() {
         return mDegree;
     }
@@ -35,7 +35,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     public GLRenderer(Context context) {
         try {
-            model = new STLReader().parserBinStlInAssets(context, "huba.stl");
+            model = new STLReader().parserBinStlInAssets(context, "wilson.stl");
+            centrePoint = model.getCentrePoint();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,17 +59,17 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 
         //眼睛对着原点看
-        GLU.gluLookAt(gl, eye.x, eye.y, eye.z, center.x,
-                center.y, center.z, up.x, up.y, up.z);
+        GLU.gluLookAt(gl, eye.x, eye.y, eye.z, centrePoint.x, centrePoint.y, centrePoint.z, up.x, up.y, up.z);
+//        GLU.gluLookAt(gl, eye.x, eye.y, eye.z, centrePoint.x, centrePoint.y, centrePoint.z, up.x, up.y, up.z);
 
         //为了能有立体感觉，通过改变mDegree值，让模型不断旋转
-       gl.glRotatef(mDegree, 0, 1, 0);
+       gl.glRotatef(mDegree, 1, 0, 0);
+       // gl.glRotatex();
 
         //将模型放缩到View刚好装下
         gl.glScalef(mScalef, mScalef, mScalef);
         //把模型移动到原点
-        gl.glTranslatef(-mCenterPoint.x, -mCenterPoint.y,
-                -mCenterPoint.z);
+        gl.glTranslatef(-mCenterPoint.x, -mCenterPoint.y, -mCenterPoint.z);
 
 
         //===================begin==============================//
@@ -128,7 +129,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         gl.glEnable(GL10.GL_LIGHT0);
         float r = model.getR();
         //r是半径，不是直径，因此用0.5/r可以算出放缩比例
-        mScalef = 0.5f / r;
+        mScalef = 1.0f / r;
         mCenterPoint = model.getCentrePoint();
     }
 }
